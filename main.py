@@ -44,27 +44,27 @@ def day12_part2():
             adjacent[left].append(right)
             adjacent[right].append(left)
     
-    def dfs(currentVert: str, found):
-        print(currentVert, found)
+    def dfs(currentVert: str, found, twice):
+        #print(currentVert, found)
         if currentVert == "end":
             return 1
 
-        if len(list(filter(lambda x: x == currentVert, found))) == 2:
-            return 0
+        if currentVert.islower() and currentVert in found:
+            if twice:
+                return 0
+            twice = True
+
+        found = found | {currentVert}
 
         total = 0
         for vert in adjacent[currentVert]:
             if vert == "start":
                 continue
 
-            found.append(vert)
-
-            total += dfs(vert, found)
-        
-            found.pop()
+            total += dfs(vert, found, twice)
 
         return total
     
-    print(dfs("start", []))
+    print(dfs("start", set(), False))
 
 day12_part2()
